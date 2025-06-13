@@ -1,18 +1,21 @@
 import app from "./app";
+import config from "./app/config";
+import mongoose from "mongoose";
 
-const port = 3000;
+// const mongoose = require("mongoose");
 
-const mongoose = require('mongoose');
-
-main().catch(err => console.log(err));
+main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect();
-
+  try {
+    await mongoose.connect(config.database_url as string);
+    app.listen(config.port, () => {
+      console.log(`Server is running at http://localhost:${config.port}`);
+      console.log("Press Ctrl+C to quit. You have to shut your mouth up!");
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-    console.log("Press Ctrl+C to quit.");
-});
+main();
