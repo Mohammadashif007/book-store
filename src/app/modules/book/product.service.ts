@@ -6,24 +6,30 @@ const createStudentIntoDB = async (product: TProduct) => {
   return result;
 };
 
-const getAllProducts = async() => {
-    const result = await Products.find();
-    return result;
-}
+const getAllProducts = async () => {
+  const result = await Products.find();
+  return result;
+};
 
-const getSingleProductFromDB = async(id: string) => {
-    const result = await Products.findById(id);
-    return result;
-} 
+const getSingleProductFromDB = async (id: string) => {
+  const result = await Products.findById(id);
+  return result;
+};
 
-const deleteSingleProductFromDB = async(id: string) => {
-    const result = await Products.findByIdAndDelete(id);
-    return result;
-}
+const updateProductIntoDB = async (id: string, payload: Partial<TProduct>) => {
+  const result = await Products.findByIdAndUpdate(id, payload, { new: true });
+  return result;
+};
+
+const deleteSingleProductFromDB = async (id: string) => {
+  const result = await Products.findByIdAndDelete(id);
+  return result;
+};
 
 export const ProductServices = {
-    createStudentIntoDB,
-    getAllProducts,
-    getSingleProductFromDB,
-    deleteSingleProductFromDB
-}
+  createStudentIntoDB,
+  getAllProducts,
+  getSingleProductFromDB,
+  updateProductIntoDB,
+  deleteSingleProductFromDB,
+};
