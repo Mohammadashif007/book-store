@@ -3,26 +3,39 @@ import { TOrder } from "./order.interface";
 import { Order } from "./order.model";
 
 const createOrderIntoDB = async (order: TOrder) => {
-  const product = await Products.findById(order.product);
+  const productID = order.product;
+  const product = await Products.findById(productID);
   console.log(product);
-  if (product?.quantity >= order.quantity) {
-    const updatedProductQuantity = product?.quantity - order.quantity;
-    const result = await Order.create(order);
-    if (updatedProductQuantity === 0) {
-      await Products.findByIdAndUpdate(
-        order.product,
-        { inStock: false },
-        { new: true },
-      );
-    }
-    await Products.findByIdAndUpdate(
-      order.product,
-      { quantity: updatedProductQuantity },
-      { new: true },
-    );
-    return result;
+  if (!product) {
+    return {
+      statusCode: 400,
+      success: false,
+      message: "Product Not found",
+    };
   }
-  return "insufficient product quantity";
+  if (order.quantity > product.quantity) {
+    return { statusCode: 400, success: false, message: "insufficient stock" };
+  }
+  product.quantity -= order.quantity;
+  if (product.quantity === 0) {
+    product.inStock = false;
+  }
+  await product.save();
+
+  const totalPrice = order.quantity * product.price;
+
+  const result = await Order.create({
+    email: order.email,
+    product: order.product,
+    quantity: order.quantity,
+    totalPrice: totalPrice,
+  });
+  return {
+    statusCode: 201,
+    success: true,
+    message: "Product created successfully",
+    data: result,
+  };
 };
 
 const getAllOrdersFromDB = async () => {
@@ -36,13 +49,20 @@ const deleteOrderFromDB = async (id: string) => {
 };
 
 const getRevenue = async () => {
-  const result = await Order.find();
-  const totalPrice = result.quantity * result.price;
+  const result = await Order.aggregate([
+    { $group: { _id: null, totalRevenue: { $sum: "$totalPrice" } } },
+  ]);
+  console.log(result[0].totalRevenue);
+  return { TotalRevenue: result[0].totalRevenue };
+
+  // const totalRevenue = result.reduce((sum, order) => sum + order.totalPrice, 0);
+  // console.log(totalRevenue);
+  // return totalRevenue;
 };
 
 export const OrderServices = {
   createOrderIntoDB,
   getAllOrdersFromDB,
   deleteOrderFromDB,
-  getRevenue
+  getRevenue,
 };
