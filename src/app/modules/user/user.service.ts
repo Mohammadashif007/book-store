@@ -1,17 +1,26 @@
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 
-const registerUserIntoDB = async (payload: TUser) => {
+const registerUser = async (payload: TUser) => {
   const result = await User.create(payload);
   return result;
 };
 
-const loginUser = async (email: string) => {
-  const result = await User.find({ email: email });
+const loginUser = async (payload: Partial<TUser>) => {
+  const result = await User.findOne({ email: payload.email });
+  if(!result){
+    throw new Error("User not found")
+  }
+  return result;
+};
+
+const getAllUser = async () => {
+  const result = await User.find();
   return result;
 };
 
 export const UserServices = {
-  registerUserIntoDB,
+  registerUser,
   loginUser,
+  getAllUser,
 };
