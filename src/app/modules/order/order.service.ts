@@ -54,10 +54,6 @@ const getRevenue = async () => {
   ]);
   console.log(result[0].totalRevenue);
   return { TotalRevenue: result[0].totalRevenue };
-
-  // const totalRevenue = result.reduce((sum, order) => sum + order.totalPrice, 0);
-  // console.log(totalRevenue);
-  // return totalRevenue;
 };
 
 export const OrderServices = {

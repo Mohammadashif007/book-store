@@ -3,6 +3,7 @@ import cors from "cors";
 import express from "express";
 import { ProductRoutes } from "./app/modules/product/product.routes";
 import { OrderRoutes } from "./app/modules/order/order.routes";
+import { UserRoutes } from "./app/modules/user/user.routes";
 const app = express();
 
 //! middleware
@@ -14,6 +15,9 @@ app.use("/api/products", ProductRoutes);
 
 // ! application routes (order)
 app.use("/api", OrderRoutes);
+
+// ! application routes (user)
+app.use("/api", UserRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
