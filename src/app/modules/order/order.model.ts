@@ -3,7 +3,7 @@ import { TOrder } from "./order.interface";
 
 const orderSchema = new Schema<TOrder>(
   {
-    email: { type: String, required: true },
+    userId: {type: Schema.Types.ObjectId, ref: "Users"},
     product: { type: Schema.Types.ObjectId, ref: "Products", required: true },
     quantity: { type: Number, required: true },
     totalPrice: { type: Number },

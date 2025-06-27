@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { validateLogin, validateUser } from "./user.validation";
+import { validateUser } from "./user.validation";
 import { UserServices } from "./user.service";
 
 const registerUser = async (
@@ -21,20 +21,7 @@ const registerUser = async (
   }
 };
 
-const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const loginInfo = req.body;
-    const validatedLogin = validateLogin.parse(loginInfo);
-    const result = await UserServices.loginUser(validatedLogin);
-    res.status(200).json({
-      success: true,
-      message: "User login successfully",
-      data: result,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+
 
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -51,6 +38,5 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
 
 export const UserControllers = {
   registerUser,
-  loginUser,
   getUser,
 };

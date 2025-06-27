@@ -5,6 +5,7 @@ import { ProductRoutes } from "./app/modules/product/product.routes";
 import { OrderRoutes } from "./app/modules/order/order.routes";
 import { UserRoutes } from "./app/modules/user/user.routes";
 import { globalErrorHandler } from "./app/middleware/globalErrorHandler";
+import { AuthRoutes } from "./app/modules/auth/auth.routes";
 const app = express();
 
 //! middleware
@@ -19,6 +20,9 @@ app.use("/api", OrderRoutes);
 
 // ! application routes (user)
 app.use("/api/user", UserRoutes);
+
+// ! application routes (auth)
+app.use("/api/auth/", AuthRoutes)
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");

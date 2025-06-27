@@ -5,7 +5,6 @@ import { Order } from "./order.model";
 const createOrderIntoDB = async (order: TOrder) => {
   const productID = order.product;
   const product = await Products.findById(productID);
-  console.log(product);
   if (!product) {
     return {
       statusCode: 400,
@@ -25,7 +24,7 @@ const createOrderIntoDB = async (order: TOrder) => {
   const totalPrice = order.quantity * product.price;
 
   const result = await Order.create({
-    email: order.email,
+    userId: order.userId,
     product: order.product,
     quantity: order.quantity,
     totalPrice: totalPrice,
